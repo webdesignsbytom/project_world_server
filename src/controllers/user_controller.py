@@ -10,7 +10,6 @@ def authenticate_user(email, password):
         return {'id': 1, 'email': email}
     return None
 
-
 def create_new_user(email, username):
     conn = None
     try:
@@ -32,7 +31,7 @@ def get_all_users():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('SELECT email FROM "prisma"."User"')
+        cur.execute('SELECT * FROM "prisma"."User"')
         records = cur.fetchall()
         return records
     except Exception as e:
