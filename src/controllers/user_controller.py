@@ -28,6 +28,28 @@ def create_new_user(email, password):
         if conn:
             conn.close()
 
+# Update user
+def update_user(user_id, user_data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        # Prepare the SET part of the SQL query dynamically based on user_data
+        set_clause = ', '.join([f"{key} = %s" for key in user_data])
+        values = list(user_data.values()) + [user_id]
+
+        query = f'UPDATE "User" SET {set_clause} WHERE id = %s'
+        cur.execute(query, values)
+        conn.commit()
+        return True
+    except Exception as e:
+        print("An error occurred:", e)
+        return False
+    finally:
+        if conn:
+            conn.close()
+
 
 # Get all users in database
 def get_all_users():

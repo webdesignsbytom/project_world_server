@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app
 from controllers.image_controller import save_image_metadata
 from utilities.response_util import sendDataResponse, sendMessageResponse
 
@@ -19,7 +19,7 @@ def upload_image_route(user_id):
 
         if file:
             filename = str(uuid.uuid4()) + os.path.splitext(file.filename)[1]
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
 
             if save_image_metadata(user_id, file_path):

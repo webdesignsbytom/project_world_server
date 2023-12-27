@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from controllers.user_controller import create_new_user
 from controllers.user_controller import get_all_users
 from controllers.user_controller import authenticate_user
+from controllers.user_controller import update_user
 from utilities.response_util import sendDataResponse, sendMessageResponse
 from utilities.token_util import generate_token
 
@@ -35,8 +36,20 @@ def create_new_user_route():
     except Exception as e:
         return sendDataResponse("str(e)", 500)
     
+
+@user_blueprint.route('/update-user/<user_id>', methods=['PATCH'])
+def update_user_route(user_id):
+    user_data = request.json
+    if not user_data:
+        return sendMessageResponse('No data provided', 400)
+
+    if update_user(user_id, user_data):
+        return sendDataResponse({'message': 'User updated successfully'}, 200)
+    else:
+        return sendMessageResponse('Failed to update user', 500)  
    
    
+
 @user_blueprint.route('/login', methods=['POST'])
 def login():
     user_data = request.json
