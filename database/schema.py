@@ -5,14 +5,16 @@ import psycopg2
 # Load environment variables from .env file
 load_dotenv()
 
-database_url = os.getenv('DATABASE_URL')
+database_url = os.getenv("DATABASE_URL")
+
 
 def create_connection():
     # Use the database URL from the environment variable to establish a connection
     return psycopg2.connect(database_url)
 
+
 def create_tables():
-    commands = ( 
+    commands = (
         """
         CREATE TABLE IF NOT EXISTS "User" (
             id UUID PRIMARY KEY,
@@ -39,6 +41,15 @@ def create_tables():
         )
         """,
         """
+        CREATE TABLE IF NOT EXISTS "Image" (
+            id UUID PRIMARY KEY,
+            user_id UUID REFERENCES "User"(id),
+            image_path VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW()
+        )
+        """,
+        """
         CREATE TABLE IF NOT EXISTS "Event" (
             id UUID PRIMARY KEY,
             type VARCHAR(50) NOT NULL,
@@ -49,7 +60,7 @@ def create_tables():
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         )
-        """
+        """,
     )
     conn = None
     try:
