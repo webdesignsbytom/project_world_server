@@ -1,6 +1,6 @@
 # event_controller.py
 import psycopg2
-from database.database import get_db_connection
+from dbclient.database import get_db_connection
 
 def get_all_events():
     conn = None

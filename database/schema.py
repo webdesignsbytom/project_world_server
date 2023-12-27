@@ -19,6 +19,10 @@ def create_tables():
             email VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
             role VARCHAR(50) NOT NULL DEFAULT 'USER',
+            person1 VARCHAR(50) NOT NULL DEFAULT 'Person1',
+            person2 VARCHAR(50) NOT NULL DEFAULT 'Person2',
+            person1Insta VARCHAR(50) NOT NULL DEFAULT '#',
+            person2Insta VARCHAR(50) NOT NULL DEFAULT '#',           
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         )

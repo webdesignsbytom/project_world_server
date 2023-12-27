@@ -1,6 +1,6 @@
 import psycopg2
 import uuid
-from database.database import get_db_connection
+from dbclient.database import get_db_connection
 
 def authenticate_user(email, password):
     # Placeholder function to authenticate a user
