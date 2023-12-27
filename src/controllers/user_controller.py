@@ -1,4 +1,5 @@
 import psycopg2
+import uuid
 from database.database import get_db_connection
 
 def authenticate_user(email, password):
@@ -10,12 +11,14 @@ def authenticate_user(email, password):
         return {'id': 1, 'email': email}
     return None
 
-def create_new_user(email, username):
+# Create a new User
+def create_new_user(email, password):
     conn = None
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO "prisma"."User" (email, username) VALUES (%s, %s)', (email, username))
+        # 'role' is omitted and will default to 'USER'
+        cur.execute('INSERT INTO "User" (id, email, password) VALUES (%s, %s, %s)', (str(uuid.uuid4()), email, password))
         conn.commit()
         return True
     except Exception as e:
@@ -26,12 +29,13 @@ def create_new_user(email, username):
             conn.close()
 
 
+# Get all users in database
 def get_all_users():
     conn = None
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('SELECT * FROM "prisma"."User"')
+        cur.execute('SELECT * FROM "User"')
         records = cur.fetchall()
         return records
     except Exception as e:
