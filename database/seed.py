@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import psycopg2
 import uuid
 from schema import create_connection, create_tables
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -94,6 +95,12 @@ def drop_tables():
         DROP TABLE IF EXISTS "Event" CASCADE;
         """,
         """
+        DROP TABLE IF EXISTS "Image" CASCADE;
+        """,
+        """
+        DROP TABLE IF EXISTS "Account" CASCADE;
+        """,
+        """
         DROP TABLE IF EXISTS "User" CASCADE;
         """,
         """
@@ -118,8 +125,8 @@ def main():
     drop_tables()
     create_tables()
     create_triggers()
-    seed_users()
-    seed_events()
+    # seed_users()
+    # seed_events()
 
 
 if __name__ == '__main__':

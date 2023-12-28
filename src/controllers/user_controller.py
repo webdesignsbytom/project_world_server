@@ -11,22 +11,27 @@ def authenticate_user(email, password):
         return {'id': 1, 'email': email}
     return None
 
+
 # Create a new User
-def create_new_user(email, password):
+def create_new_user(email, password, accountType='single', person1='Person1', person2='Person2', person1Insta='#', person2Insta='#'):
     conn = None
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        # 'role' is omitted and will default to 'USER'
-        cur.execute('INSERT INTO "User" (id, email, password) VALUES (%s, %s, %s)', (str(uuid.uuid4()), email, password))
+        user_id = str(uuid.uuid4())
+        cur.execute(
+            'INSERT INTO "User" (id, email, password, accountType, person1, person2, person1Insta, person2Insta) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', 
+            (user_id, email, password, accountType, person1, person2, person1Insta, person2Insta)
+        )
         conn.commit()
-        return True
+        return user_id
     except Exception as e:
         print("An error occurred:", e)
-        return False
+        return None
     finally:
         if conn:
             conn.close()
+
 
 # Update user
 def update_user(user_id, user_data):

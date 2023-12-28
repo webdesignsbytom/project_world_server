@@ -16,15 +16,22 @@ def create_connection():
 def create_tables():
     commands = (
         """
-        CREATE TABLE IF NOT EXISTS "User" (
+        CREATE TABLE IF NOT EXISTS "Account" (
             id UUID PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
-            role VARCHAR(50) NOT NULL DEFAULT 'USER',
+            role VARCHAR(50) NOT NULL DEFAULT 'USER',         
+            created_at TIMESTAMP DEFAULT NOW(),
+            updated_at TIMESTAMP DEFAULT NOW()
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS "User" (
+            id UUID PRIMARY KEY,
+            accountType VARCHAR(10) NOT NULL DEFAULT 'single',
             person1 VARCHAR(50) NOT NULL DEFAULT 'Person1',
-            person2 VARCHAR(50) NOT NULL DEFAULT 'Person2',
             person1Insta VARCHAR(50) NOT NULL DEFAULT '#',
-            person2Insta VARCHAR(50) NOT NULL DEFAULT '#',           
+            account_id UUID REFERENCES "Account"(id) ON DELETE CASCADE,       
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         )
@@ -35,7 +42,7 @@ def create_tables():
             name VARCHAR(255) NOT NULL,
             locationId INT NOT NULL,
             visited BOOLEAN DEFAULT TRUE,
-            user_id UUID REFERENCES "User"(id),
+            user_id UUID REFERENCES "User"(id) ON DELETE CASCADE,
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         )
@@ -43,7 +50,7 @@ def create_tables():
         """
         CREATE TABLE IF NOT EXISTS "Image" (
             id UUID PRIMARY KEY,
-            user_id UUID REFERENCES "User"(id),
+            user_id UUID REFERENCES "User"(id) ON DELETE CASCADE,
             image_path VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
@@ -56,11 +63,11 @@ def create_tables():
             code INT,
             topic VARCHAR(255),
             content TEXT,
-            created_by UUID REFERENCES "User"(id),
+            created_by UUID REFERENCES "Account"(id) ON DELETE CASCADE,
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         )
-        """,
+        """
     )
     conn = None
     try:
